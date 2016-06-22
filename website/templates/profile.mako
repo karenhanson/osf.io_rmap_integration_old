@@ -153,6 +153,9 @@
                  }'></div>
             </div>
         </div>
+
+    	<%include file="rmap_widget.mako"/>
+
     </div>
     <div class="col-sm-6">
         <div class="panel panel-default">

@@ -332,6 +332,8 @@
          </div>
         % endif
 
+   	<%include file="rmap_widget.mako"/>
+
         <!-- Show child on right if widgets -->
         % if addons:
             ${children()}
