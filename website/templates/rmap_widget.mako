@@ -159,6 +159,7 @@
             { url: url },
             function(data)
             {
+                // If successful, set the widget's source to make the graph appear.
                 discoId = data;
                 var discoUrl = getDiscoUrl(discoId);
                 $("#widget").attr("src", discoUrl);
@@ -181,6 +182,7 @@
     // Called when the "Create" button is clicked in the confirmation pop-up dialog.
     // If there was no previous DiSCO for this OSF entity, one is created.
     // TODO - If there was a previous DiSCO, it is updated on the RMap server.
+    // Hides the confirmation pop-up.
     function createDisco()
     {
         // Decide whether to create a DiSCO or update an existing one.
