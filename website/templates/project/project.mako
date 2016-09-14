@@ -383,6 +383,14 @@
          </div>
         % endif
 
+        <%include
+            file = "rmap_widget.mako"
+            args = "isUser = False,
+                    isRegistration = node['is_registration'],
+                    isPublic = node['is_public'],
+                    nodeId = node['url']"
+        />
+
         <!-- Show child on right if widgets -->
         % if addons:
             ${children()}

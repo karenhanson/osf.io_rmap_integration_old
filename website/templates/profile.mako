@@ -153,6 +153,15 @@
                  }'></div>
             </div>
         </div>
+
+        <%include
+            file = "rmap_widget.mako"
+            args = "isUser = True,
+                    isRegistration = False,
+                    isPublic = True,
+                    nodeId = profile['url']"
+        />
+
     </div>
     <div class="col-sm-6">
         <div class="panel panel-default">
