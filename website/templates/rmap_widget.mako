@@ -134,7 +134,7 @@
     function addDiscoToRmap(osfId)
     {
         // Prepare values to use in POST that creates a DiSCO
-        var site = "rmaptransform/transforms";
+        var site = "rmaptransform:8888/transforms";
         if ("${isUser}" == "True")
         {
             var target = "osf_user";
