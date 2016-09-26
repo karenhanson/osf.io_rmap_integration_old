@@ -98,8 +98,8 @@ def send_mail(to_addr, mail, mimetype='plain', from_addr=None, mailer=None,
     message = mail.text(**context) if mimetype in ('plain', 'txt') else mail.html(**context)
     # Don't use ttls and login in DEBUG_MODE
     ttls = login = not settings.DEBUG_MODE
-    logger.debug('Sending email...')
-    logger.debug(u'To: {to_addr}\nFrom: {from_addr}\nSubject: {subject}\nMessage: {message}'.format(**locals()))
+    logger.info('Sending email...')
+    logger.info(u'To: {to_addr}\nFrom: {from_addr}\nSubject: {subject}\nMessage: {message}'.format(**locals()))
 
     kwargs = dict(
         from_addr=from_addr,
