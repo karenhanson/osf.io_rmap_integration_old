@@ -16,13 +16,11 @@
 
             <div class="modal-body">
                 <p class="text-info">
-                    An RMap DiSCO is a graphical visualization of the
-                    connections between this entity and other OSF
-                    entities such as Users, Projects and Components.
+                    You are about to create a DiSCO in RMap.  A DiSCO is a list of relationships between this page
+                    and it's related components such as contributors, components, and projects.  
                 </p>
                 <p class="text-danger">
-                    Creating a DiSCO will cause your OSF data to be
-                    publicly visible on the RMap server.
+                    Creating a DiSCO will cause your OSF data to be publicly visible on the RMap server.
                 </p>
             </div> <!-- end modal-body -->
 
@@ -43,9 +41,10 @@
     <div class="panel-heading clearfix" id="RMap">
         <h3 class="panel-title"  style="padding-top: 5px">RMap Graph</h3>
         <div class="pull-right">
+        	
             <a class="btn btn-sm btn-default" id="createButton"
-                data-toggle="modal" data-target="#confirmCreate">Create RMap DiSCO</a>
-            <button class="btn btn-link project-toggle">
+                data-toggle="modal" data-target="#confirmCreate">Generate RMap DiSCO</a>
+        	<button class="btn btn-link project-toggle">
                 <i class="fa fa-angle-down"></i>
             </button>
         </div>
@@ -135,7 +134,7 @@
     function addDiscoToRmap(osfId)
     {
         // Prepare values to use in POST that creates a DiSCO
-        var site = "dev.rmap-project.org/transformdev/transforms";
+        var site = "rmaptransform/transforms";
         if ("${isUser}" == "True")
         {
             var target = "osf_user";
