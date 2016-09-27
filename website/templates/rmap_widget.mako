@@ -154,7 +154,7 @@
         
         // Perform POST to create DiSCO and get its ID
         var url = site + "/" + target + "?id=" + osfId;
-        $.post("http://localhost:7000",
+        $.post("http://192.168.99.101:7000",
             { url: url },
             function(data)
             {
