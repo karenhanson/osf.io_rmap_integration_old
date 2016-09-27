@@ -29,7 +29,7 @@ class CORSRequestHandler (CGIHTTPServer.CGIHTTPRequestHandler):
 
         ## Add credentials to the URL and POST to the RMap server.
         user_pass = "1CQXJEwFFkPpm:HEQQlPZ7Fms6x1"
-        postUrl = "https://" + user_pass + "@" + url
+        postUrl = "http://" + user_pass + "@" + url
         response = requests.post(postUrl)
 
         ## Return the discoId (from RMap) to the caller
