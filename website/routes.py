@@ -1662,6 +1662,13 @@ def make_url_map(app):
         ),
 
         Rule(
+            '/rmap/',
+            'post',
+            project_views.rmap.user_rmap_post,
+            json_renderer,
+        ),
+
+        Rule(
             '/subscriptions/',
             'get',
             notification_views.get_subscriptions,

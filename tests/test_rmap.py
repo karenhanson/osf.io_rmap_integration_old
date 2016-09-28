@@ -5,16 +5,17 @@ from nose.tools import *  # flake8: noqa
 from framework.auth.core import Auth
 from website import settings
 
-from website.project.views.rmap import _rmap_url_for_node
+from website.project.views.rmap import _rmap_url_for_node, _rmap_url_for_user
+from website.util import api_url_for
 
 from tests.base import OsfTestCase
 from tests.factories import AuthUserFactory, ProjectFactory
 
 
-class TestRmapViews(OsfTestCase):
+class TestRmapNodeViews(OsfTestCase):
 
     def setUp(self):
-        super(TestRmapViews, self).setUp()
+        super(TestRmapNodeViews, self).setUp()
         self.user = AuthUserFactory()
         self.project = ProjectFactory(creator=self.user, is_public=True)
         self.url = self.project.api_url_for('node_rmap_post')
@@ -37,7 +38,7 @@ class TestRmapViews(OsfTestCase):
         )
 
     def tearDown(self):
-        super(TestRmapViews, self).tearDown()
+        super(TestRmapNodeViews, self).tearDown()
         settings.RMAP_BASE_URL = self._old_rmap_url
         settings.RMAP_PASS = self._old_rmap_pass
 
@@ -67,3 +68,42 @@ class TestRmapViews(OsfTestCase):
         url = private_project.api_url_for('node_rmap_post')
         res = self.app.post_json(url, {}, auth=self.user.auth, expect_errors=True)
         assert_equal(res.status_code, 400)
+
+
+class TestRmapUserViews(OsfTestCase):
+
+    def setUp(self):
+        super(TestRmapUserViews, self).setUp()
+        self.user = AuthUserFactory()
+        self.url = api_url_for('user_rmap_post')
+
+        self._old_rmap_url = settings.RMAP_BASE_URL
+        self._old_rmap_pass = settings.RMAP_PASS
+
+        settings.RMAP_BASE_URL = 'rmaptest.test/'
+        settings.RMAP_PASS = 'myprecious'
+
+        self._set_up_mock_response_for_user(self.user)
+
+    def _set_up_mock_response_for_user(self, user):
+        rmap_url = _rmap_url_for_user(user)
+        httpretty.register_uri(
+            httpretty.POST,
+            rmap_url,
+            body='abc123',
+            status=200
+        )
+
+    def tearDown(self):
+        super(TestRmapUserViews, self).tearDown()
+        settings.RMAP_BASE_URL = self._old_rmap_url
+        settings.RMAP_PASS = self._old_rmap_pass
+
+    def test_rmap_post_valid(self):
+        res = self.app.post_json(self.url, {}, auth=self.user.auth)
+        assert_equal(res.status_code, 201)
+        self.user.reload()
+
+        rmap_id = self.user.get_identifier('disco')
+        assert_true(bool(rmap_id))
+        assert_equal(rmap_id.value, 'abc123')

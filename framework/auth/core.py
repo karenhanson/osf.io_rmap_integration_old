@@ -29,6 +29,7 @@ from framework.sessions import session
 from framework.sessions.model import Session
 from framework.sessions.utils import remove_sessions_for_user
 from website import mails, settings, filters, security
+from website.identifiers.model import IdentifierMixin
 
 name_formatters = {
     'long': lambda user: user.fullname,
@@ -208,7 +209,7 @@ class Auth(object):
         )
 
 
-class User(GuidStoredObject, AddonModelMixin):
+class User(GuidStoredObject, AddonModelMixin, IdentifierMixin):
 
     # Node fields that trigger an update to the search engine on save
     SEARCH_UPDATE_FIELDS = {
