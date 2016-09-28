@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-import mock
+import httpretty
 from nose.tools import *  # flake8: noqa
 
 from framework.auth.core import Auth
-from tests.base import OsfTestCase
+from website import settings
 
+from website.project.views.rmap import _rmap_url_for_node
+
+from tests.base import OsfTestCase
 from tests.factories import AuthUserFactory, ProjectFactory
 
 
@@ -16,20 +19,36 @@ class TestRmapViews(OsfTestCase):
         self.project = ProjectFactory(creator=self.user, is_public=True)
         self.url = self.project.api_url_for('node_rmap_post')
 
-    @mock.patch('website.project.views.rmap._create_rmap_for_node')
-    def test_rmap_post_valid(self, mock_create_rmap):
-        mock_create_rmap.return_value = 'abc123'
+        self._old_rmap_url = settings.RMAP_BASE_URL
+        self._old_rmap_pass = settings.RMAP_PASS
+
+        settings.RMAP_BASE_URL = 'rmaptest.test/'
+        settings.RMAP_PASS = 'myprecious'
+
+        self._set_up_mock_response_for_node(self.project)
+
+    def _set_up_mock_response_for_node(self, node):
+        rmap_url = _rmap_url_for_node(node)
+        httpretty.register_uri(
+            httpretty.POST,
+            rmap_url,
+            body='abc123',
+            status=200
+        )
+
+    def tearDown(self):
+        super(TestRmapViews, self).tearDown()
+        settings.RMAP_BASE_URL = self._old_rmap_url
+        settings.RMAP_PASS = self._old_rmap_pass
+
+    def test_rmap_post_valid(self):
         res = self.app.post_json(self.url, {}, auth=self.user.auth)
         assert_equal(res.status_code, 201)
         self.project.reload()
-        # Project now has a rmap identifier
-        rmap_id = self.project.get_identifier('rmap')
+
+        rmap_id = self.project.get_identifier('disco')
         assert_true(bool(rmap_id))
         assert_equal(rmap_id.value, 'abc123')
-
-        # Request was made
-        mock_create_rmap.assert_called()
-        mock_create_rmap.assert_called_with(self.project)
 
     def test_rmap_post_non_contributor_should_error(self):
         noncontrib = AuthUserFactory()

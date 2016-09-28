@@ -1749,3 +1749,8 @@ SPAM_FLAGGED_REMOVE_FROM_SEARCH = False
 
 SHARE_URL = 'http://localhost:8000/'
 SHARE_API_TOKEN = None
+
+
+# RMaps
+RMAP_BASE_URL = None  # e.g. "rmaptransform:8080/transforms"
+RMAP_PASS = None
