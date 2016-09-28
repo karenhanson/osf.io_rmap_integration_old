@@ -1549,6 +1549,16 @@ def make_url_map(app):
             json_renderer,
         ),
 
+        Rule(
+            [
+                '/project/<pid>/rmap/',
+                '/project/<pid>/node/<nid>/rmap/',
+            ],
+            'post',
+            project_views.rmap.node_rmap_post,
+            json_renderer,
+        ),
+
         # Statistics
         Rule([
             '/project/<pid>/statistics/',
