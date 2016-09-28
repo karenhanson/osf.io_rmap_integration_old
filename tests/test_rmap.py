@@ -42,6 +42,18 @@ class TestRmapNodeViews(OsfTestCase):
         settings.RMAP_BASE_URL = self._old_rmap_url
         settings.RMAP_PASS = self._old_rmap_pass
 
+    def test_rmap_get_valid_no_disco_id(self):
+        res = self.app.get(self.url, auth=self.user.auth)
+        assert_equal(res.status_code, 200)
+        assert_equal(res.json['disco_id'], None)
+
+    def test_rmap_get_valid_with_disco_id(self):
+        disco_id = 'pan1cath3d1sc0'
+        self.project.set_identifier_value('disco', disco_id)
+        res = self.app.get(self.url, auth=self.user.auth)
+        assert_equal(res.status_code, 200)
+        assert_equal(res.json['disco_id'], disco_id)
+
     def test_rmap_post_valid(self):
         res = self.app.post_json(self.url, {}, auth=self.user.auth)
         assert_equal(res.status_code, 201)
@@ -98,6 +110,18 @@ class TestRmapUserViews(OsfTestCase):
         super(TestRmapUserViews, self).tearDown()
         settings.RMAP_BASE_URL = self._old_rmap_url
         settings.RMAP_PASS = self._old_rmap_pass
+
+    def test_rmap_get_valid_no_disco_id(self):
+        res = self.app.get(self.url, auth=self.user.auth)
+        assert_equal(res.status_code, 200)
+        assert_equal(res.json['disco_id'], None)
+
+    def test_rmap_get_valid_with_disco_id(self):
+        disco_id = 'pan1cath3d1sc0'
+        self.user.set_identifier_value('disco', disco_id)
+        res = self.app.get(self.url, auth=self.user.auth)
+        assert_equal(res.status_code, 200)
+        assert_equal(res.json['disco_id'], disco_id)
 
     def test_rmap_post_valid(self):
         res = self.app.post_json(self.url, {}, auth=self.user.auth)

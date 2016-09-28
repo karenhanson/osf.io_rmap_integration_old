@@ -1554,6 +1554,16 @@ def make_url_map(app):
                 '/project/<pid>/rmap/',
                 '/project/<pid>/node/<nid>/rmap/',
             ],
+            'get',
+            project_views.rmap.node_rmap_get,
+            json_renderer,
+        ),
+
+        Rule(
+            [
+                '/project/<pid>/rmap/',
+                '/project/<pid>/node/<nid>/rmap/',
+            ],
             'post',
             project_views.rmap.node_rmap_post,
             json_renderer,
@@ -1658,6 +1668,13 @@ def make_url_map(app):
             '/settings/notifications/',
             'post',
             profile_views.user_choose_mailing_lists,
+            json_renderer,
+        ),
+
+        Rule(
+            '/rmap/',
+            'get',
+            project_views.rmap.user_rmap_get,
             json_renderer,
         ),
 
