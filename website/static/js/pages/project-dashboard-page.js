@@ -25,6 +25,9 @@ var AddProject = require('js/addProjectPlugin');
 var mHelpers = require('js/mithrilHelpers');
 var SocialShare = require('js/components/socialshare');
 
+var rmapWidgetProject = require('js/rmap/rmap-widget-project');
+
+
 var ctx = window.contextVars;
 var node = window.contextVars.node;
 var nodeApiUrl = ctx.node.urls.api;
@@ -124,6 +127,9 @@ $(document).ready(function () {
     if (newComponentElem) {
         m.mount(newComponentElem, AddComponentButton);
     }
+
+    //TODO: refactor later!
+    rmapWidgetProject("#rmapmessage");
 
     if (ctx.node.institutions.length && !ctx.node.anonymous){
         m.mount(document.getElementById('instLogo'), m.component(institutionLogos, {institutions: window.contextVars.node.institutions}));

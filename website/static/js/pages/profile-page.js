@@ -4,6 +4,7 @@
  *
 */
 
+var rmapWidgetProfile = require('js/rmap/rmap-widget-profile');
 var profile = require('../profile.js'); // Social, Job, Education classes
 require('../project.js'); // Needed for nodelists to work
 require('../components/logFeed.js'); // Needed for nodelists to work
@@ -13,3 +14,5 @@ var ctx = window.contextVars;
 new profile.Social('#social', ctx.socialUrls, ['view']);
 new profile.Jobs('#jobs', ctx.jobsUrls, ['view']);
 new profile.Schools('#schools', ctx.schoolsUrls, ['view']);
+
+rmapWidgetProfile("#rmapmessage");

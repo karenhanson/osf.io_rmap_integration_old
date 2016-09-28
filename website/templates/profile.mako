@@ -154,13 +154,7 @@
             </div>
         </div>
 
-        <%include
-            file = "rmap_widget.mako"
-            args = "isUser = True,
-                    isRegistration = False,
-                    isPublic = True,
-                    nodeId = profile['url']"
-        />
+        <%include file = "profile/profile_rmap_widget.mako" />
 
     </div>
     <div class="col-sm-6">
