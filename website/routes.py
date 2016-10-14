@@ -1564,16 +1564,6 @@ def make_url_map(app):
                 '/project/<pid>/rmap/',
                 '/project/<pid>/node/<nid>/rmap/',
             ],
-            'get',
-            project_views.rmap.node_rmap_get,
-            json_renderer,
-        ),
-
-        Rule(
-            [
-                '/project/<pid>/rmap/',
-                '/project/<pid>/node/<nid>/rmap/',
-            ],
             'post',
             project_views.rmap.node_rmap_post,
             json_renderer,
