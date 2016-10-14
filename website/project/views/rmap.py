@@ -63,14 +63,11 @@ def _create_rmap_for_user(user):
 
 @must_be_valid_project
 @must_be_contributor_or_public
-def node_rmap_get(node, **kwargs):
-    """Retrieve identifiers for a node. Node must be a public registration.
-    """
-    if not node.is_public:
-        raise HTTPError(http.BAD_REQUEST)
+def node_rmap_get(node, auth, *args, **kwargs):
+    disco_id = node.get_identifier_value('disco')
     return {
-        'disco_id': node.get_identifier_value('disco'),
-    }
+        'disco_id': disco_id
+    }, 200
 
 
 @must_be_valid_project
@@ -88,9 +85,16 @@ def node_rmap_post(node, auth, *args, **kwargs):
 
 
 @must_be_logged_in
+def user_rmap_get(auth, *args, **kwargs):
+    disco_id = auth.user.get_identifier_value('disco')
+    return {
+        'disco_id': disco_id
+    }, 200
+
+@must_be_logged_in
 def user_rmap_post(auth, *args, **kwargs):
     disco_id = _create_rmap_for_user(auth.user)
     auth.user.set_identifier_value('disco', disco_id)
     return {
-        'disco_id': 'foo'
+        'disco_id': disco_id,
     }, 201
