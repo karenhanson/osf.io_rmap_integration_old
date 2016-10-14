@@ -34,6 +34,11 @@ var ProjectViewModel = function(data, options) {
     self.doi = ko.observable(data.node.identifiers.doi);
     self.ark = ko.observable(data.node.identifiers.ark);
     self.idCreationInProgress = ko.observable(false);
+    
+    /** for RMap DiSCO ID **/
+    self.disco = ko.observable(data.node.disco_id);
+    self.discoCreationInProgress = ko.observable(false);
+       
     self.watchedCount = ko.observable(data.node.watched_count);
     self.userIsWatching = ko.observable(data.user.is_watching);
     self.dateRegistered = new $osf.FormattableDate(data.node.registered_date);
@@ -271,6 +276,70 @@ var ProjectViewModel = function(data, options) {
         }).always(function() {
             clearTimeout(timeout);
             self.idCreationInProgress(false); // hide loading indicator
+        });
+    };
+    
+    
+    //RMap support
+    self.hasRMapDiSCO = ko.pureComputed(function() {
+        return !!(self.disco());
+    });
+
+    self.canCreateRMapDiSCO = ko.pureComputed(function() {
+        return !self.hasRMapDiSCO() &&
+            self.nodeIsPublic &&
+            self.userPermissions.indexOf('admin') !== -1;
+    });
+
+    self.discoUrl = ko.pureComputed(function() {
+        return self.disco() ? 'https://dev.rmap-project.org/discos/' + encodeURIComponent(self.disco()) : null;
+    });
+
+    self.askCreateRMapDiSCO = function() {
+        var self = this;
+        bootbox.confirm({
+            title: 'Create RMap DiSCO',
+            message: '<p class="overflow text-info">' +
+                'You are about to create a DiSCO in RMap.  A DiSCO is a list of relationships between this page ' +
+                'and it\'s related components such as contributors, components, and projects.  ' +
+                '</p>' +
+                '<p class="text-danger">Creating a DiSCO will cause your OSF data to be publicly visible on the RMap server.',
+            callback: function(confirmed) {
+                if (confirmed) {
+                    self.createRMapDiSCO();
+                }
+            },
+            buttons:{
+                confirm:{
+                    label:'Create'
+                }
+            }
+        });
+    };
+
+    self.createRMapDiSCO = function() {
+        // Only show loading indicator for slow responses
+        var timeout = setTimeout(function() {
+            self.discoCreationInProgress(true); // show loading indicator
+        }, 10000);
+        var url = self.apiUrl + 'rmap/';
+        return $.post(
+            url
+        ).done(function(resp) {
+            self.disco(resp.disco_id);
+        }).fail(function(xhr) {
+            var response = xhr.responseText;
+            var headers = xhr.getResponseHeader('Location');
+            var message = 'We could not create the DiSCO at this time. ' +
+                'The RMap service may be down right now. ' +
+                'Please try again soon and/or contact ' +
+                '<a href="mailto: support@osf.io">support@osf.io</a>' +
+                url + '<br/>' + response + "<br/>" + message;
+            $osf.growl('Error', message, 'danger');
+            Raven.captureMessage('Could not create RMap DiSCO', {extra: {url: url, status: xhr.status}});
+        }).always(function() {
+            clearTimeout(timeout);
+            self.discoCreationInProgress(false); // hide loading indicator
         });
     };
 

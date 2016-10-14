@@ -1,10 +1,12 @@
 import requests
+import httplib as http
 
 from framework.auth.decorators import must_be_logged_in
 from framework.exceptions import HTTPError
 from website.project.decorators import (
     must_be_valid_project,
     must_have_permission,
+    must_be_contributor_or_public,
 )
 from website.util.permissions import ADMIN
 from website import settings
@@ -57,6 +59,18 @@ def _create_rmap_for_user(user):
     except requests.exceptions.HTTPError:
         raise HTTPError(response.status_code)
     return response.text  # the DiscoID
+
+
+@must_be_valid_project
+@must_be_contributor_or_public
+def node_rmap_get(node, **kwargs):
+    """Retrieve identifiers for a node. Node must be a public registration.
+    """
+    if not node.is_public:
+        raise HTTPError(http.BAD_REQUEST)
+    return {
+        'disco_id': node.get_identifier_value('disco'),
+    }
 
 
 @must_be_valid_project

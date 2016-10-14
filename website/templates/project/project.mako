@@ -199,6 +199,13 @@
                   </p>
                   <!-- /ko -->
                 </span>
+                
+        
+                % if not node['anonymous']:
+                <%include file = "project/project_rmap_widget.mako" />
+                %endif
+                
+                
                 <p>
                     Category: <span id="nodeCategoryEditable">${node['category']}</span>
                     <span data-bind="css: icon"></span>
@@ -382,10 +389,6 @@
             </div>
          </div>
         % endif
-
-		% if not node['anonymous']:
-        <%include file = "project/project_rmap_widget.mako" />
-        %endif
 
         <!-- Show child on right if widgets -->
         % if addons:

@@ -23,11 +23,8 @@
 
             <div class="modal-footer">
                 <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
-                <!--if on a project page create node disco, if on a profile page create user disco-->
-                
-                % if 'write' in user['permissions']:
-                <button type="submit" class="btn btn-danger" onclick="createProfileDisco()">Create</button>
-                % endif
+                <button type="submit" class="btn btn-danger" onclick="rmapNode.createProfileDisco()">Create</button>
+
             </div> <!-- end modal-footer -->
 
         </div> <!-- end modal- content -->
@@ -43,8 +40,10 @@
         <h3 class="panel-title"  style="padding-top: 5px">RMap Graph</h3>
         <div class="pull-right">
         	
+             % if 'write' in user['permissions']:
             <a class="btn btn-sm btn-default" id="createButton"
                 data-toggle="modal" data-target="#confirmCreate">Generate RMap DiSCO</a>
+             % endif
         	<button class="btn btn-link project-toggle">
                 <i class="fa fa-angle-down"></i>
             </button>
