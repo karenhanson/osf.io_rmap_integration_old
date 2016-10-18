@@ -1,13 +1,18 @@
                
 
 <span data-bind="if: hasRMapDiSCO()" class="scripted">
-  <p>DiSCO ID: <span data-bind="text: discoId"></span></p>
+  <p>
+        DiSCO ID: <span data-bind="text: disco"></span>
+      <a data-bind="click: askUpdateRMapDiSCO, visible: !discoCreationInProgress()">update</a>
+  </p>
+  
+  
 </span>
 <span data-bind="if: canCreateRMapDiSCO()" class="scripted">
   <!-- ko if: discoCreationInProgress() -->
     <p>
       <i class="fa fa-spinner fa-lg fa-spin"></i>
-        <span class="text-info">Creating RMap DiSCO. Please wait...</span>
+      <span class="text-info">Creating RMap DiSCO. Please wait...</span>
     </p>
   <!-- /ko -->
 

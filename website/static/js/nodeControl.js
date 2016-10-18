@@ -342,6 +342,32 @@ var ProjectViewModel = function(data, options) {
             self.discoCreationInProgress(false); // hide loading indicator
         });
     };
+    
+    
+    self.askUpdateRMapDiSCO = function() {
+        var self = this;
+        bootbox.confirm({
+            title: 'Update RMap DiSCO',
+            message: '<p class="overflow text-info">' +
+                'You are about to update your DiSCO in RMap.  This will inactivate the previous version of the DiSCO and ' +
+                'create a new version.  It will still be possible to retrieve the previous version through the public interface.  ' +
+                '</p>' +
+                '<p class="text-danger">Creating a DiSCO will cause a map of your OSF project to be publicly visible on the RMap server.',
+            callback: function(confirmed) {
+                if (confirmed) {
+                    self.createRMapDiSCO();
+                }
+            },
+            buttons:{
+                confirm:{
+                    label:'Create'
+                }
+            }
+        });
+    };
+    
+    
+    
 
 };
 

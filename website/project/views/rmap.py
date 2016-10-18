@@ -14,7 +14,7 @@ from website import settings
 
 def _rmap_url_for_node(node):
     target = 'osf_registration' if node.is_registration else 'osf_node'
-    ret = 'http://{rmap_pass}@{base_url}/transforms/{target}/?id={nid}'.format(
+    ret = 'http://{rmap_pass}@{base_url}/{target}/?id={nid}'.format(
         rmap_pass=settings.RMAP_PASS,
         base_url=settings.RMAP_BASE_URL.rstrip('/'),
         target=target,
@@ -26,7 +26,7 @@ def _rmap_url_for_node(node):
     return ret
 
 def _rmap_url_for_user(user):
-    ret = 'http://{rmap_pass}@{base_url}/transforms/osf_user/?id={uid}'.format(
+    ret = 'http://{rmap_pass}@{base_url}/osf_user/?id={uid}'.format(
         rmap_pass=settings.RMAP_PASS,
         base_url=settings.RMAP_BASE_URL.rstrip('/'),
         uid=user._id
