@@ -125,3 +125,8 @@ def user_rmap_post(auth, *args, **kwargs):
     return {
         'disco_id': 'foo'
     }, 201
+
+def user_rmap_get(auth, *args, **kwargs):
+    return {
+        'disco_id': auth.user.get_identifier_value('disco'),
+    }

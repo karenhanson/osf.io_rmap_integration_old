@@ -1682,7 +1682,7 @@ def make_url_map(app):
         ),
 
         Rule(
-            '/rmap/',
+            '/profile/<uid>/rmap/',
             'get',
             project_views.rmap.user_rmap_get,
             json_renderer,
