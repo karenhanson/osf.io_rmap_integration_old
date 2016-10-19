@@ -1752,5 +1752,7 @@ SHARE_API_TOKEN = None
 
 
 # RMaps
-RMAP_BASE_URL = None  # e.g. "rmaptransform:8080/transforms"
-RMAP_PASS = None
+RMAP_TRANSFORM_BASE_URL = None  # e.g. "rmaptransform:8080/transforms"
+RMAP_API_BASE_URL = None # e.g. 'https://dev.rmap-project.org/api'
+RMAP_GUI_BASE_URL = None # e.g. 'https://dev.rmap-project.org/app'
+RMAP_PASS = None 

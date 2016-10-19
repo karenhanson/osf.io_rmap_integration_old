@@ -38,6 +38,7 @@ var ProjectViewModel = function(data, options) {
     /** for RMap DiSCO ID **/
     self.disco = ko.observable(data.node.disco_id);
     self.discoCreationInProgress = ko.observable(false);
+    self.discoRemoveInProgress = ko.observable(false);
        
     self.watchedCount = ko.observable(data.node.watched_count);
     self.userIsWatching = ko.observable(data.user.is_watching);
@@ -285,14 +286,19 @@ var ProjectViewModel = function(data, options) {
         return !!(self.disco());
     });
 
+    self.canUpdateRMapDiSCO = ko.pureComputed(function() {
+        return self.nodeIsPublic &&
+            self.userPermissions.indexOf('admin') !== -1;
+    });
+
     self.canCreateRMapDiSCO = ko.pureComputed(function() {
         return !self.hasRMapDiSCO() &&
             self.nodeIsPublic &&
             self.userPermissions.indexOf('admin') !== -1;
     });
-
+    
     self.discoUrl = ko.pureComputed(function() {
-        return self.disco() ? 'https://dev.rmap-project.org/discos/' + encodeURIComponent(self.disco()) : null;
+        return self.disco() ? 'https://dev.rmap-project.org/app/discos/' + encodeURIComponent(self.disco()) : null;
     });
 
     self.askCreateRMapDiSCO = function() {
@@ -343,6 +349,34 @@ var ProjectViewModel = function(data, options) {
         });
     };
     
+
+    self.removeRMapDiSCO = function() {
+        // Only show loading indicator for slow responses
+        var timeout = setTimeout(function() {
+            self.discoRemoveInProgress(true); // show loading indicator
+        }, 5000);
+        var url = self.apiUrl + 'rmap/';
+        return $.delete(
+            url
+        ).done(function(resp) {
+            self.disco(null);
+        }).fail(function(xhr) {
+            var response = xhr.responseText;
+            var headers = xhr.getResponseHeader('Location');
+            var message = 'We could not remove the DiSCO at this time. ' +
+                'The RMap service may be down right now. ' +
+                'Please try again soon and/or contact ' +
+                '<a href="mailto: support@osf.io">support@osf.io</a>' +
+                url + '<br/>' + response + "<br/>" + message;
+            $osf.growl('Error', message, 'danger');
+            Raven.captureMessage('Could not remove RMap DiSCO', {extra: {url: url, status: xhr.status}});
+        }).always(function() {
+            clearTimeout(timeout);
+            self.discoRemoveInProgress(false); // hide loading indicator
+        });
+    };
+    
+    
     
     self.askUpdateRMapDiSCO = function() {
         var self = this;
@@ -360,12 +394,30 @@ var ProjectViewModel = function(data, options) {
             },
             buttons:{
                 confirm:{
-                    label:'Create'
+                    label:'Update'
                 }
             }
         });
     };
     
+    
+    self.askRemoveRMapDiSCO = function() {
+        var self = this;
+        bootbox.confirm({
+            title: 'Remove RMap DiSCO',
+            message: '<p class="overflow text-info">You are about to remove your DiSCO from RMap.  Would you like to proceed?.</p>' +
+            callback: function(confirmed) {
+                if (confirmed) {
+                    self.removeRMapDiSCO();
+                }
+            },
+            buttons:{
+                confirm:{
+                    label:'Remove'
+                }
+            }
+        });
+    };
     
     
 
