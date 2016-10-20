@@ -405,7 +405,7 @@ var ProjectViewModel = function(data, options) {
         var self = this;
         bootbox.confirm({
             title: 'Remove RMap DiSCO',
-            message: '<p class="overflow text-info">You are about to remove your DiSCO from RMap.  Would you like to proceed?.</p>' +
+            message: '<p class="overflow text-info">You are about to remove your DiSCO from RMap.  Would you like to proceed?.</p>',
             callback: function(confirmed) {
                 if (confirmed) {
                     self.removeRMapDiSCO();
