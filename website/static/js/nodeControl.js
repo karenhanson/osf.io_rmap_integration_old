@@ -355,7 +355,7 @@ var ProjectViewModel = function(data, options) {
         var timeout = setTimeout(function() {
             self.discoRemoveInProgress(true); // show loading indicator
         }, 5000);
-        var url = self.apiUrl + 'rmap';
+        var url = self.apiUrl + 'rmap/';
         
         return $.ajax({
             url: url,
