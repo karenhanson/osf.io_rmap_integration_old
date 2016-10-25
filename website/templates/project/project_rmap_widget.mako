@@ -4,8 +4,7 @@
   <p>
       RMap DiSCO ID: <a data-bind="text:disco, attr: {href: discoUrl}" target="_blank"></a>
       <span data-bind="if: canUpdateRMapDiSCO()" class="scripted">
-          (<a data-bind="click: askUpdateRMapDiSCO, visible: !discoCreationInProgress()">update</a>
-          &nbsp;|&nbsp;<a data-bind="click: askRemoveRMapDiSCO, visible: !discoRemoveInProgress()">remove</a>)
+          (<a data-bind="click: askUpdateRMapDiSCO, visible: !discoCreationInProgress()">update</a>&nbsp;|&nbsp;<a data-bind="click: askRemoveRMapDiSCO, visible: !discoRemoveInProgress()">remove</a>)
       </span>
   </p>
 </span>

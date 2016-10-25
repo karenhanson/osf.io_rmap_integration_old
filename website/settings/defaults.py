@@ -1750,9 +1750,10 @@ SPAM_FLAGGED_REMOVE_FROM_SEARCH = False
 SHARE_URL = 'http://localhost:8000/'
 SHARE_API_TOKEN = None
 
-
 # RMaps
+RMAP_TRANSFORM_BASE_PROTOCOL='http'
 RMAP_TRANSFORM_BASE_URL = None  # e.g. "rmaptransform:8080/transforms"
-RMAP_API_BASE_URL = None # e.g. 'https://dev.rmap-project.org/api'
+RMAP_API_BASE_PROTOCOL = 'https'
+RMAP_API_BASE_URL =  None # e.g.'dev.rmap-project.org/api'
 RMAP_GUI_BASE_URL = None # e.g. 'https://dev.rmap-project.org/app'
 RMAP_PASS = None 

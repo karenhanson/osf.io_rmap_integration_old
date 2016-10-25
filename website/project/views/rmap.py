@@ -20,7 +20,8 @@ def _rmap_url_for_node(node):
         # Need to configure RMAP_API_BASE_URL
         raise HTTPError(503, data=dict(message_long='RMap service disabled at this time.'))
     target = 'osf_registration' if node.is_registration else 'osf_node'
-    ret = 'http://{rmap_pass}@{base_url}/{target}?id={nid}'.format(
+    ret = '{protocol}://{rmap_pass}@{base_url}/{target}?id={nid}'.format(
+        protocol=settings.RMAP_TRANSFORM_BASE_PROTOCOL,
         rmap_pass=settings.RMAP_PASS,
         base_url=settings.RMAP_TRANSFORM_BASE_URL.rstrip('/'),
         target=target,
@@ -36,10 +37,11 @@ def _rmap_url_for_remove(node):
         # Need to configure RMAP_API_BASE_URL
         raise HTTPError(503, data=dict(message_long='RMap service disabled at this time.'))
     disco = node.get_identifier_value('disco')
-    ret = 'http://{rmap_pass}@{base_url}/discos/{disco_id}'.format(
+    ret = '{protocol}://{rmap_pass}@{base_url}/discos/{disco_id}'.format(
+        protocol=settings.RMAP_API_BASE_PROTOCOL,
         rmap_pass=settings.RMAP_PASS,
         base_url=settings.RMAP_API_BASE_URL.rstrip('/'),
-        disco_id=urllib.urlencode(disco)
+        disco_id=urllib.quote(disco)
         )
     return ret
 
@@ -93,9 +95,9 @@ def node_rmap_post(node, auth, *args, **kwargs):
 @must_have_permission(ADMIN)
 def node_rmap_remove(node, auth, *args, **kwargs):
     _remove_rmap_for_node(node)
-    node.set_identifier_value('disco', None)
+    node.remove_identifier_value('disco')
     return {
-        'disco_id': None
+        'disco_id': node.get_identifier_value('disco')
     }, 200
 
 

@@ -47,3 +47,12 @@ class IdentifierMixin(object):
             assert identifier is not None
             identifier.value = value
             identifier.save()
+
+    #TODO: add error handling and auth here...?  need different model?
+    def remove_identifier_value(self, category, save=False):
+        identifier = self.get_identifier(category)
+        Identifier.remove_one(identifier)
+        if save:
+            self.save()
+        return True
+        return False
