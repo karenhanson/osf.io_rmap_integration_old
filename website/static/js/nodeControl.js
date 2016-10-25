@@ -355,12 +355,15 @@ var ProjectViewModel = function(data, options) {
         var timeout = setTimeout(function() {
             self.discoRemoveInProgress(true); // show loading indicator
         }, 5000);
-        var url = self.apiUrl + 'rmap/';
-        return $.delete(
-            url
-        ).done(function(resp) {
-            self.disco(null);
-        }).fail(function(xhr) {
+        var url = self.apiUrl + 'rmap';
+        
+        return $.ajax({
+            url: url,
+            type: 'DELETE',
+            success: function(resp) {
+                self.disco(null);
+            },
+            error: function(xhr) {
             var response = xhr.responseText;
             var headers = xhr.getResponseHeader('Location');
             var message = 'We could not remove the DiSCO at this time. ' +
@@ -370,10 +373,13 @@ var ProjectViewModel = function(data, options) {
                 url + '<br/>' + response + "<br/>" + message;
             $osf.growl('Error', message, 'danger');
             Raven.captureMessage('Could not remove RMap DiSCO', {extra: {url: url, status: xhr.status}});
-        }).always(function() {
-            clearTimeout(timeout);
-            self.discoRemoveInProgress(false); // hide loading indicator
+            },
+            complete: function (xhr){
+                clearTimeout(timeout);
+                self.discoRemoveInProgress(false); // hide loading indicator
+            }
         });
+        
     };
     
     

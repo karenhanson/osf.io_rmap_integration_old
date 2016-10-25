@@ -1,3 +1,4 @@
+import logging
 import requests
 import httplib as http
 import urllib
@@ -12,12 +13,14 @@ from website.project.decorators import (
 from website.util.permissions import ADMIN
 from website import settings
 
+logger = logging.getLogger(__name__)
+
 def _rmap_url_for_node(node):
     if not settings.RMAP_API_BASE_URL or not settings.RMAP_PASS:
         # Need to configure RMAP_API_BASE_URL
         raise HTTPError(503, data=dict(message_long='RMap service disabled at this time.'))
     target = 'osf_registration' if node.is_registration else 'osf_node'
-    ret = 'http://{rmap_pass}@{base_url}/{target}/?id={nid}'.format(
+    ret = 'http://{rmap_pass}@{base_url}/{target}?id={nid}'.format(
         rmap_pass=settings.RMAP_PASS,
         base_url=settings.RMAP_TRANSFORM_BASE_URL.rstrip('/'),
         target=target,
@@ -47,6 +50,7 @@ def _create_rmap_for_node(node):
     try:
         response.raise_for_status()
     except requests.exceptions.HTTPError:
+        logger.error(response.text)
         raise HTTPError(response.status_code)
     return response.text  # the DiscoID
 
@@ -75,7 +79,7 @@ def node_rmap_get(node, **kwargs):
 @must_have_permission(ADMIN)
 def node_rmap_post(node, auth, *args, **kwargs):
     if not node.is_public:
-        raise HTTPError(400, data=dict(message_long='RMaps can only be created '
+        raise HTTPError(400, data=dict(message_long='RMap DiSCOs can only be created '
                                        'for public projects. Make your project public '
                                        'and retry your request.'))
     disco_id = _create_rmap_for_node(node)
@@ -96,7 +100,7 @@ def node_rmap_remove(node, auth, *args, **kwargs):
 
 
 def _rmap_url_for_user(user):
-    ret = 'http://{rmap_pass}@{base_url}/osf_user/?id={uid}'.format(
+    ret = 'http://{rmap_pass}@{base_url}/osf_user?id={uid}'.format(
         rmap_pass=settings.RMAP_PASS,
         base_url=settings.RMAP_TRANSFORM_BASE_URL.rstrip('/'),
         uid=user._id
