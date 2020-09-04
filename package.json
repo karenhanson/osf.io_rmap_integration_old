@@ -50,7 +50,7 @@
     "markdown-it-toc": "~1.1.0",
     "markdown-it-video": "~0.4.0",
     "mime-types": "~2.0.12",
-    "mithril": "0.2.0",
+    "mithril": "2.0.4",
     "moment": "^2.14.1",
     "mongodb": "^1.4.40",
     "morgan": "^1.5.1",
